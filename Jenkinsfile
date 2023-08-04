@@ -46,7 +46,7 @@ pipeline {
         stage("Build Docker Image"){
             steps{
                 script{
-                    sh"docker build -t 174447486748.dkr.ecr.us-east-1.amazonaws.com/wordsmith-api:1.0-SNAPSHOT -f Dockerfile "
+                    sh"docker build -f Dockerfile -t 174447486748.dkr.ecr.us-east-1.amazonaws.com/wordsmith-api:1.0-SNAPSHOT . "
                 }
             }
         }
