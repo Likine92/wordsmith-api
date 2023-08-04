@@ -48,7 +48,7 @@ pipeline {
                 script{
                     dir("${WORKSPACE}"){
                         sh "ls -l"
-                        sh"docker build -t 174447486748.dkr.ecr.us-east-1.amazonaws.com/wordsmith-api:1.0-SNAPSHOT . "
+                        sh"docker build -t 174447486748.dkr.ecr.us-east-1.amazonaws.com/wordsmith-api:1.0-SNAPSHOT -f main_Dockerfile . "
                     }
                 }
             }
