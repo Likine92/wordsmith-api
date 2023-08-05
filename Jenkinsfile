@@ -9,7 +9,7 @@ pipeline {
                 jdk 'jdk'
             }
             steps {
-                sh 'java --version'
+                getComponentVersion()
                 sh 'mvn clean install'
             }
         }
@@ -73,3 +73,12 @@ pipeline {
             }
     }
 }
+
+void getComponentVersion(){
+    def pom = readMavenPom file: 'pom.xml'
+        version = pom.project.version
+        println version
+}
+
+
+
