@@ -1,3 +1,6 @@
+def tag
+def name = "wordsmith-api"
+def registry = "174447486748.dkr.ecr.us-east-1.amazonaws.com"
 pipeline {
     agent any
     tools {
@@ -9,8 +12,10 @@ pipeline {
                 jdk 'jdk'
             }
             steps {
-                sh 'java --version'
-                sh 'mvn clean install'
+                script{
+                    tag = getComponentTag()
+                    sh 'mvn clean install'
+                }
             }
         }
         
@@ -48,7 +53,7 @@ pipeline {
                 script{
                     dir("${WORKSPACE}"){
                         sh "ls -l"
-                        sh"docker build -t 174447486748.dkr.ecr.us-east-1.amazonaws.com/wordsmith-api:1.0-SNAPSHOT  . "
+                        sh"docker build -t ${registry}/${name}:${tag}  . "
                     }
                 }
             }
@@ -58,8 +63,8 @@ pipeline {
             steps{
                 script{
                     withAWS([credentials:'aws-creds',region:'us-east-1']){
-                        sh"aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 174447486748.dkr.ecr.us-east-1.amazonaws.com"
-                        sh "docker push 174447486748.dkr.ecr.us-east-1.amazonaws.com/wordsmith-api:1.0-SNAPSHOT"
+                        sh"aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin ${registry}"
+                        sh "docker push ${registry}/${name}:${tag}"
                     }
                 }
             }
@@ -68,8 +73,29 @@ pipeline {
     post{
         failure{
                 withAWS([credentials:'aws-creds',region:'us-east-1']){
-                    sh"aws sns publish --topic-arn arn:aws:sns:us-east-1:174447486748:jenkins-notification --message 'Build failed for component wordsmith-api : Build URl: ${BUILD_URL}' --subject 'Build Status'"
+                    sh"aws sns publish --topic-arn arn:aws:sns:us-east-1:174447486748:jenkins-notification --message 'Build failed for component ${name} Build URl: ${BUILD_URL}' --subject 'Build Status'"
                 }
             }
     }
 }
+
+void getComponentTag(){
+    def pom = readMavenPom file: 'pom.xml'
+        version = pom.version
+        println version
+    def branch = "${BRANCH_NAME}"
+        println branch
+        branch = branch.replaceAll("/","-")
+        println branch
+    def buildNumber = "${BUILD_NUMBER}"
+        println buildNumber
+    def tag
+        if(branch == "develop"){
+            tag = "${version}-rc-${buildNumber}"
+        } else if(branch == "main"){
+            tag = "${version}-${buildNumber}"
+        } else{
+            tag = "${version}-${branch}.${buildNumber}"
+        }
+        return tag
+}    
