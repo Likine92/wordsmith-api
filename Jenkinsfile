@@ -76,7 +76,7 @@ pipeline {
 
 void getComponentVersion(){
     def pom = readMavenPom file: 'pom.xml'
-        version = pom.project.version
+        version = pom.version
         println version
 }
 
