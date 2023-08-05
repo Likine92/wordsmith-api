@@ -1,4 +1,4 @@
-def tag = getComponentTag()
+def tag
 def name = "wordsmith-api"
 def registry = "174447486748.dkr.ecr.us-east-1.amazonaws.com"
 pipeline {
@@ -13,6 +13,7 @@ pipeline {
             }
             steps {
                 script{
+                    tag = getComponentTag()
                     sh 'mvn clean install'
                 }
             }
