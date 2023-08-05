@@ -80,6 +80,8 @@ void getComponentVersion(){
         println version
     def branch = "${BRANCH_NAME}"
         println branch
+        branch = branch.replaceAll("/","-")
+        println branch
     def buildNumber = "${BUILD_NUMBER}"
         println buildNumber
     def tag
