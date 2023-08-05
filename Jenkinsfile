@@ -68,7 +68,7 @@ pipeline {
     post{
         failure{
                 withAWS([credentials:'aws-creds',region:'us-east-1']){
-                    sh"aws sns publish --topic-arn arn:aws:sns:us-east-1:174447486748:jenkins-notification --message 'Build failed for component wordsmith-api Build URl: ${BUILD_URL}' --subject 'Build Status'"
+                    // sh"aws sns publish --topic-arn arn:aws:sns:us-east-1:174447486748:jenkins-notification --message 'Build failed for component wordsmith-api Build URl: ${BUILD_URL}' --subject 'Build Status'"
                 }
             }
     }
@@ -78,6 +78,8 @@ void getComponentVersion(){
     def pom = readMavenPom file: 'pom.xml'
         version = pom.version
         println version
+    def branch = "${BRANCH_NAME}"
+        println branch
 }
 
 
