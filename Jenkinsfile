@@ -25,7 +25,7 @@ pipeline {
         stage('Sonar Scan') {
             steps {
                 withSonarQubeEnv("sonar"){
-                    sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
+                     sh 'mvn org.sonarsource.scanner.maven:sonar-maven-plugin:3.9.0.2155:sonar'
                 }
             }
         }
@@ -64,5 +64,12 @@ pipeline {
                 }
             }
         }
+    } 
+    post{
+        failure{
+                withAWS([credentials:'aws-creds',region:'us-east-1']){
+                    sh"aws sns publish --topic-arn arn:aws:sns:us-east-1:174447486748:jenkins-notification --message 'Build failed for component wordsmith-api : Build URl: ${BUILD_URL}' --subject 'Build Status'"
+                }
+            }
     }
 }
