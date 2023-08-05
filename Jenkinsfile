@@ -82,9 +82,13 @@ void getComponentVersion(){
         println branch
     def buildNumber = "${BUILD_NUMBER}"
         println buildNumber
-    def tag = "${version}-${branch}-${buildNumber}"
+    def tag
+        if(branch == "develop"){
+            tag = "${version}-rc-${buildNumber}"
+        } else if(branch == "main"){
+            tag = "${version}-${buildNumber}"
+        } else{
+            tag = "${version}-${branch}.${buildNumber}"
+        }
         println tag
-}
-
-
-
+}    
