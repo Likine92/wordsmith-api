@@ -57,8 +57,10 @@ pipeline {
         stage("Push To Ecr"){
             steps{
                 script{
-                    sh"aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 174447486748.dkr.ecr.us-east-1.amazonaws.com"
-                    sh "docker push 174447486748.dkr.ecr.us-east-1.amazonaws.com/wordsmith-api:1.0-SNAPSHOT"
+                    withAWS([credentials:'aws-creds',region:'us-east-1']){
+                        sh"aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 174447486748.dkr.ecr.us-east-1.amazonaws.com"
+                        sh "docker push 174447486748.dkr.ecr.us-east-1.amazonaws.com/wordsmith-api:1.0-SNAPSHOT"
+                    }
                 }
             }
         }
