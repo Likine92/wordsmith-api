@@ -1,0 +1,6 @@
+dependencies:
+- name: word-smith-library
+  repository: oci://940090592876.dkr.ecr.us-east-1.amazonaws.com
+  version: 0.1.0
+digest: sha256:4ce3c91956b15c7b6e0e884a07e17a9fff971f2347d048ef03b29173b5d4e318
+generated: "2023-12-21T01:55:25.840681Z"

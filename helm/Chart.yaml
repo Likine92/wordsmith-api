@@ -1,0 +1,9 @@
+name: wordsmith-api
+version: 1.0.0
+appVersion: "1.0.0"
+description: a global chart for wordsmith api
+apiVersion: v2
+dependencies:
+- name: word-smith-library
+  version: 0.1.0
+  repository: oci://940090592876.dkr.ecr.us-east-1.amazonaws.com

@@ -1,0 +1,13 @@
+deployment:
+  replicas: 2
+  service:
+    name: api-service
+    port: 8080
+    targetPort: 8080
+    type: ClusterIp
+  container:
+    port: 8080
+  image:
+    tag: bretfisher/wordsmith-api
+  pullpolicy: Always
+  name: api
